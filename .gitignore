@@ -1,0 +1,11 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Obsidian local cache/workspace state
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json

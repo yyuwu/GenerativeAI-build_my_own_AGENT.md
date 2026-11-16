@@ -190,6 +190,7 @@
   },
   "active": "82fa42e30f797ab0",
   "lastOpenFiles": [
+    "index.html",
     "presentation/template.html",
     "assets/choju93_0012_3.png",
     "assets/choju68_0023_1.png",
@@ -213,7 +214,6 @@
     "scripts/generate_html_wiki.py",
     "scripts/title_anchor_map.md",
     "scripts/title_anchor_map.json",
-    "scripts/build_title_anchor_map.py",
     "raw/lectures/supplement_述詞量化定理與Q17應用.md",
     "raw/assets/valid_forms_reference_sheet.md",
     "raw/assets/rules_for_predicate_logic_sheet.md",

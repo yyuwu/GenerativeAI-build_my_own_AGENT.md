@@ -2125,8 +2125,13 @@ def generate_html():
 
     out_file = Path("logic_wiki.html")
     out_file.write_text(full_page_html, encoding="utf-8")
+    
+    # 同步輸出為 index.html (供 GitHub Pages 與靜態伺服器預設首頁使用)
+    index_file = Path("index.html")
+    index_file.write_text(full_page_html, encoding="utf-8")
+    
     print(f"成功更新單一檔案網頁（首頁 + 亮橘細線磨砂版）！")
-    print(f"檔案位置: {out_file} (大小: {out_file.stat().st_size} bytes)")
+    print(f"檔案位置: {out_file} 與 {index_file} (大小: {out_file.stat().st_size} bytes)")
 
 if __name__ == "__main__":
     generate_html()
