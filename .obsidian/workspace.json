@@ -1,0 +1,240 @@
+{
+  "main": {
+    "id": "c84464414286fe05",
+    "type": "split",
+    "children": [
+      {
+        "id": "509497efa1fcfb82",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "82fa42e30f797ab0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "raw/README.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "README"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "5c6e2173943dc6e8",
+    "type": "split",
+    "children": [
+      {
+        "id": "ff91a23a0ea12b90",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a4856a0a97a39fb4",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "檔案瀏覽器"
+            }
+          },
+          {
+            "id": "886d1dc7b980e9df",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜尋"
+            }
+          },
+          {
+            "id": "e53fbd4fdeed357e",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "書籤"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "fe800449854ebbae",
+    "type": "split",
+    "children": [
+      {
+        "id": "2ce2efdbec28d4fa",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "479fe3a967703cec",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "raw/README.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "反向連結"
+            }
+          },
+          {
+            "id": "430f0259fd7ba86f",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "raw/README.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "對外連結"
+            }
+          },
+          {
+            "id": "5f3b5a7588c18abb",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "標籤"
+            }
+          },
+          {
+            "id": "b6471178f13d1c6b",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "所有屬性"
+            }
+          },
+          {
+            "id": "a0ac248e18f5123a",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "raw/README.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "大綱"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:開啟快速切換": false,
+      "graph:查看關聯圖": false,
+      "canvas:建立新畫布": false,
+      "daily-notes:開啟今天的每日筆記": false,
+      "templates:插入模板": false,
+      "command-palette:開啟命令面板": false,
+      "bases:建立新的 base": false
+    }
+  },
+  "active": "82fa42e30f797ab0",
+  "lastOpenFiles": [
+    "presentation/template.html",
+    "assets/choju93_0012_3.png",
+    "assets/choju68_0023_1.png",
+    "assets/choju23_0038_4.png",
+    "assets/chojuother2nd0014_10.png",
+    "assets/choju95_0039_3.png",
+    "assets/choju112_0017_4.png",
+    "assets/choju111_0006_2.png",
+    "assets/choju109_0011_3.png",
+    "assets/choju108_0007_1.png",
+    "assets/choju97_0024_5.png",
+    "assets",
+    "新增資料夾",
+    "presentation/index.html",
+    "presentation",
+    "slides/slide_content.md",
+    "slides",
+    "notes/實質條件句的哲學悖論與自然語言的語意鴻溝.md",
+    "notes",
+    "logic_wiki.html",
+    "scripts/generate_html_wiki.py",
+    "scripts/title_anchor_map.md",
+    "scripts/title_anchor_map.json",
+    "scripts/build_title_anchor_map.py",
+    "raw/lectures/supplement_述詞量化定理與Q17應用.md",
+    "raw/assets/valid_forms_reference_sheet.md",
+    "raw/assets/rules_for_predicate_logic_sheet.md",
+    "raw/README.md",
+    "log.md",
+    "wiki/exercises/ex_ch04_自然演繹法18條規則經典推導.md",
+    "wiki/exercises/ex_ch02_語句符號化與真值函應判準.md",
+    "AGENT.md",
+    "index.md",
+    "wiki/exercises/exam_期中考精華詳解與觀念避坑.md",
+    "wiki/concepts/自然語言否定深層語意_部分否定與雙重否定.md",
+    "wiki/overviews/述詞邏輯55條定理總覽與分類.md",
+    "raw/lectures/supplement_英語與漢語否定句翻譯指南.md",
+    "raw/lectures/supplement_述詞邏輯55條重要定理集.md",
+    "wiki/exercises/ex_ch10_關係述詞多重量詞推導與定理證明.md",
+    "wiki/exercises/ex_ch09_一元述詞演繹證明與易錯限制.md",
+    "wiki/exercises/ex_ch08_述詞邏輯語意學與反例模型構造.md",
+    "wiki/exercises/ex_ch07_述詞邏輯符號化與量詞陷阱.md",
+    "raw/problem_sets/quiz_述詞邏輯小考_05_06_07.md",
+    "raw/problem_sets/exercises_ch10_關係述詞與多重量詞證明.md",
+    "raw/problem_sets/exercises_ch09_一元述詞演繹證明.md",
+    "raw/problem_sets/exercises_ch08_述詞語意學與反例.md"
+  ]
+}

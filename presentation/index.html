@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>實質條件句的哲學悖論與自然語言的語意鴻溝 // 專題簡報</title>
+    <style>
+        :root {
+            --bg-page: #ffffff;
+            --bg-subtle: #fcfcfc;
+            --text-main: #171717;
+            --text-secondary: #525252;
+            --text-muted: #8c8c8c;
+            --text-faint: #b3b3b3;
+            --line-border: #e5e5e5;
+            --line-light: #f0f0f0;
+
+            /* 亮橘色核心變數 (Bright Orange Lines & Accents) */
+            --accent-orange: #ff7300;
+            --accent-orange-deep: #e65c00;
+            --line-orange: #ff7300;
+            --line-orange-soft: rgba(255, 115, 0, 0.28);
+            --line-orange-glow: rgba(255, 115, 0, 0.12);
+
+            /* 藍紫色變數 (Blue-Purple / Indigo Accent) */
+            --accent-purple: #5c56d6;
+            --accent-purple-deep: #4338ca;
+            --line-purple-soft: rgba(92, 86, 214, 0.38);
+            --bg-purple-highlight: rgba(92, 86, 214, 0.10);
+            --selection-purple: rgba(92, 86, 214, 0.22);
+
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", "Hiragino Sans GB", "Microsoft JhengHei", Roboto, sans-serif;
+            --font-mono: "JetBrains Mono", Menlo, Consolas, "Fira Code", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        ::selection {
+            background-color: var(--selection-purple);
+            color: #1e1b4b;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            font-weight: 350;
+            letter-spacing: 0.015em;
+            line-height: 1.7;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 磨砂微顆粒純 CSS 紋理遮罩 */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: radial-gradient(rgba(0, 0, 0, 0.038) 1px, transparent 0);
+            background-size: 3px 3px;
+            opacity: 0.75;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* 頂部進度條 */
+        .progress-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.04);
+            z-index: 100;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 11.11%;
+            background: var(--accent-orange);
+            box-shadow: 0 0 8px var(--accent-orange);
+            transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* 頂部控制與品牌列 */
+        header.deck-header {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.9rem 2.5rem;
+            border-bottom: 1px solid var(--line-border);
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: baseline;
+            gap: 0.55rem;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .brand-kanji {
+            font-size: 1.15rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+        }
+
+        .brand-latin {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            color: var(--accent-orange);
+            font-weight: 500;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .deck-btn {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--line-orange);
+            border-radius: 3px;
+            padding: 0.3rem 0.85rem;
+            font-family: var(--font-sans);
+            font-size: 0.78rem;
+            font-weight: 350;
+            color: var(--accent-orange-deep);
+            cursor: pointer;
+            box-shadow: 0 1px 6px var(--line-orange-glow);
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.35rem;
+        }
+
+        .deck-btn:hover {
+            border-color: var(--accent-orange-deep);
+            background: #ffffff;
+            box-shadow: 0 0 10px rgba(255, 115, 0, 0.28);
+            transform: scale(1.02);
+        }
+
+        .slide-counter {
+            font-family: var(--font-mono);
+            font-size: 0.84rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            border: 1px solid var(--line-orange-soft);
+            background: rgba(255, 115, 0, 0.05);
+            padding: 0.2rem 0.6rem;
+            border-radius: 2px;
+            letter-spacing: 0.05em;
+        }
+
+        /* 投影片主要舞台 */
+        main.deck-stage {
+            position: relative;
+            z-index: 5;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.2rem 1.8rem;
+            overflow: hidden;
+        }
+
+        .slide-viewport {
+            width: 100%;
+            max-width: 1060px;
+            height: 100%;
+            max-height: 560px;
+            position: relative;
+        }
+
+        .slide-card {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 255, 255, 0.82);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--line-orange);
+            border-radius: 4px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04), 0 1px 8px var(--line-orange-glow);
+            padding: 2.2rem 2.8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: translateY(12px) scale(0.995);
+            transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                        visibility 0.28s;
+            overflow-y: auto;
+        }
+
+        .slide-card.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+        }
+
+        /* 投影片內部排版樣式 */
+        .slide-kicker {
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+            letter-spacing: 0.18em;
+            color: var(--accent-orange);
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-title-wrap {
+            position: relative;
+            padding-right: 150px;
+        }
+
+        .slide-title {
+            font-size: 2.05rem;
+            font-weight: 450;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--line-border);
+            padding-bottom: 0.8rem;
+        }
+
+        /* 貼圖插畫樣式 (鳥獸戲畫專屬美學) */
+        .slide-sticker {
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
+            filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.08));
+            transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), filter 0.28s ease;
+            z-index: 15;
+            object-fit: contain;
+        }
+
+        .slide-card:hover .slide-sticker {
+            transform: scale(1.04) rotate(-1.5deg);
+            filter: drop-shadow(0 8px 18px rgba(255, 115, 0, 0.18));
+        }
+
+        .slide-content-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            font-size: 1.02rem;
+            color: var(--text-secondary);
+            font-weight: 350;
+            line-height: 1.8;
+        }
+
+        /* 封面專用樣式 (Slide 1) */
+        .cover-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .cover-kicker {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            letter-spacing: 0.22em;
+            color: var(--accent-orange);
+            font-weight: 500;
+            margin-bottom: 1.2rem;
+        }
+
+        .cover-title {
+            font-size: 3.2rem;
+            font-weight: 350;
+            color: var(--text-main);
+            letter-spacing: 0.04em;
+            line-height: 1.25;
+            margin-bottom: 1.2rem;
+            border: none !important;
+            padding: 0 !important;
+        }
+
+        .cover-subtitle {
+            font-size: 1.18rem;
+            color: var(--text-secondary);
+            font-weight: 350;
+            margin-bottom: 2.2rem;
+            max-width: 720px;
+        }
+
+        .cover-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--line-light);
+            padding-top: 1.2rem;
+        }
+
+        .cover-tag {
+            border: 1px solid var(--line-orange-soft);
+            color: var(--accent-orange-deep);
+            background: rgba(255, 115, 0, 0.05);
+            padding: 0.15rem 0.6rem;
+            border-radius: 2px;
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+        }
+
+        /* 網格與對比卡片 */
+        .grid-two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.4rem;
+        }
+
+        .grid-three-col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.1rem;
+        }
+
+        .deck-card {
+            background: #ffffff;
+            border: 1px solid var(--line-border);
+            border-radius: 3px;
+            padding: 1.25rem 1.4rem;
+            transition: all 0.2s ease;
+        }
+
+        .deck-card:hover {
+            border-color: var(--line-orange);
+            box-shadow: 0 2px 10px var(--line-orange-glow);
+        }
+
+        .card-heading {
+            font-size: 1.02rem;
+            font-weight: 500;
+            color: var(--text-main);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-num {
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+            color: var(--accent-orange);
+            border: 1px solid var(--line-orange-soft);
+            padding: 0.05rem 0.35rem;
+            border-radius: 2px;
+        }
+
+        .highlight-text {
+            color: var(--accent-purple-deep);
+            font-weight: 450;
+            background: var(--bg-purple-highlight);
+            padding: 0.05rem 0.35rem;
+            border-radius: 2px;
+        }
+
+        .math-symbol {
+            font-family: "Cambria Math", "Times New Roman", serif;
+            font-style: italic;
+            font-size: 1.08em;
+            padding: 0 0.15em;
+        }
+
+        .callout-box {
+            border-left: 2px solid var(--accent-orange);
+            background: rgba(255, 115, 0, 0.035);
+            padding: 0.9rem 1.4rem;
+            border-radius: 0 2px 2px 0;
+            font-size: 0.96rem;
+            color: var(--text-secondary);
+        }
+
+        .deck-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+            margin: 0.5rem 0;
+        }
+
+        .deck-table th, .deck-table td {
+            padding: 0.5rem 0.8rem;
+            border: 1px solid var(--line-light);
+            text-align: left;
+        }
+
+        .deck-table th {
+            background: var(--bg-subtle);
+            font-weight: 500;
+            color: var(--text-main);
+            border-bottom: 1px solid var(--line-border);
+        }
+
+        /* 底部導航操作列 */
+        footer.deck-footer {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.9rem 3.5rem;
+            border-top: 1px solid var(--line-border);
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .footer-shortcuts-hint {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .kbd-key {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            border: 1px solid var(--line-border);
+            background: #fff;
+            padding: 0.1rem 0.4rem;
+            border-radius: 2px;
+            color: var(--text-secondary);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        .footer-nav-btns {
+            display: flex;
+            align-items: center;
+            gap: 0.65rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頂部進度條 -->
+    <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progressBar"></div>
+    </div>
+
+    <!-- 頂部品牌與控制列 -->
+    <header class="deck-header">
+        <div class="header-brand">
+            <span class="brand-kanji">邏輯</span>
+            <span class="brand-latin">LOGIC // SLIDES</span>
+        </div>
+
+        <div class="header-controls">
+            <span class="slide-counter" id="slideCounter">01 / 09</span>
+            <button class="deck-btn" onclick="toggleFullscreen()" title="切換全螢幕 (F)">全螢幕 [F]</button>
+        </div>
+    </header>
+
+    <!-- 投影片核心主舞台 -->
+    <main class="deck-stage">
+        <div class="slide-viewport">
+
+            <!-- Slide 1: 封面 -->
+            <div class="slide-card active" data-slide="1">
+                <img src="../assets/choju109_0011_3.png" alt="指導講師蛙" class="slide-sticker" style="bottom: 2.5rem; right: 3.5rem; height: 160px;">
+                <div class="cover-container">
+                    <div class="cover-kicker">PHILOSOPHY OF LOGIC // SPECIAL STUDY</div>
+                    <h1 class="cover-title">實質條件句的哲學悖論<br>與自然語言的語意鴻溝</h1>
+                    <p class="cover-subtitle">形式邏輯、真值函應與常識推理的深層交鋒</p>
+                    <div class="cover-meta">
+                        <span class="cover-tag">研究專案</span>
+                        <span>邏輯學知識庫專案團隊</span>
+                        <span>·</span>
+                        <span>自然演繹法與語言哲學</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: 起源與衝突 -->
+            <div class="slide-card" data-slide="2">
+                <div class="slide-title-wrap">
+                    <img src="../assets/choju112_0017_4.png" alt="震驚青蛙" class="slide-sticker" style="top: -12px; right: 0; height: 110px;">
+                    <div class="slide-kicker">01 // THE CLASH OF INTUITIONS</div>
+                    <h2 class="slide-title">形式規定 vs. 日常直覺的撕裂</h2>
+                </div>
+                <div class="slide-content-body">
+                    <div class="callout-box">
+                        <strong>核心提問：</strong>當前件為假時，「若 <span class="math-symbol">P</span> 則 <span class="math-symbol">Q</span>」為什麼被形式邏輯規定為「真 (True)」？
+                    </div>
+                    <div class="grid-two-col">
+                        <div class="deck-card">
+                            <div class="card-heading"><span class="card-num">A</span>日常生活中的荒謬感</div>
+                            <p>「若有最大的偶數，則新竹是一座城市。」(<span class="highlight-text">F → T ≡ T</span>)</p>
+                            <p>「若有最大的偶數，則新竹是一種植物。」(<span class="highlight-text">F → F ≡ T</span>)</p>
+                            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.6rem;">常人直覺：前後毫無因果關係，純屬荒誕無稽之談，何以成真理？</p>
+                        </div>
+                        <div class="deck-card">
+                            <div class="card-heading"><span class="card-num">B</span>數學推導中的合理性</div>
+                            <p>「若 5 是最大的偶數，則 7 不是偶數。」(<span class="highlight-text">F → T ≡ T</span>)</p>
+                            <p>「若 5 是最大的偶數，則 6 不是偶數。」(<span class="highlight-text">F → F ≡ T</span>)</p>
+                            <p style="font-size: 0.88rem; color: var(--text-muted); margin-top: 0.6rem;">客觀推導：假定一個錯誤前提，確能保證推導出合理的推論結論。</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.94rem;">形式極小語意：<span class="math-symbol">P → Q ≡ ¬ P ∨ Q ≡ ¬(P ∧ ¬ Q)</span>，即「只要不出現前真而後假，即算為真」。衝突的本質不在於符號，而在於自然語言對<span class="highlight-text">「相干性 (Relevance)」</span>的強烈預設。</p>
+                </div>
+            </div>
+
+            <!-- Slide 3: 形式系統的必然證成 -->
+            <div class="slide-card" data-slide="3">
+                <div class="slide-title-wrap">
+                    <img src="../assets/choju97_0024_5.png" alt="守護結界貓" class="slide-sticker" style="top: -10px; right: 0; height: 105px;">
+                    <div class="slide-kicker">02 // SYSTEM JUSTIFICATION</div>
+                    <h2 class="slide-title">形式邏輯為何不能讓步？三大系統性理由</h2>
+                </div>
+                <div class="slide-content-body">
+                    <p>規定「前假則真」絕非任性，而是形式演繹體系賴以運轉的客觀基石：</p>
+                    <div class="grid-three-col">
+                        <div class="deck-card">
+                            <div class="card-heading"><span class="card-num">1</span>真值函應原則</div>
+                            <p style="font-size: 0.88rem;">複合句真值必須由成分句客觀真值唯一決定。若引入因果、時間或信念，演繹代換與機械驗證將徹底瓦解。</p>
+                        </div>
+                        <div class="deck-card">
+                            <div class="card-heading"><span class="card-num">2</span>保全核心推論規則</div>
+                            <p style="font-size: 0.88rem;">若第 2 列改為 T，則<strong>假言推理 (MP)</strong> 崩毀；若第 3、4 列改為 F，則<strong>否定前項謬誤</strong>反而在真值表上無法排除！</p>
+                        </div>
+                        <div class="deck-card">
+                            <div class="card-heading"><span class="card-num">3</span>自然演繹法約束</div>
+                            <p style="font-size: 0.88rem;">由附加律 (Add) <span class="math-symbol">Q ⊢ ¬ P ∨ Q</span> 與實質蘊涵律 (Impl)，必然保證只要後件真，整個條件句必真。</p>
+                        </div>
+                    </div>
+                    <div class="callout-box">
+                        邏輯體系的第一準則：<strong>保真性與演繹保守性</strong>。實質條件句是維持系統封閉自洽的最簡代數解。
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 4: 經典悖論展示 -->
+            <div class="slide-card" data-slide="4">
+                <div class="slide-title-wrap">
+                    <img src="../assets/choju108_0007_1.png" alt="重槌青蛙" class="slide-sticker" style="top: -12px; right: 0; height: 112px;">
+                    <div class="slide-kicker">03 // THE CLASSICAL PARADOXES</div>
+                    <h2 class="slide-title">實質蘊涵的兩大經典悖論</h2>
+                </div>
+                <div class="slide-content-body">
+                    <div class="grid-two-col">
+                        <div class="deck-card">
+                            <div class="card-heading"><span class="card-num">悖論一</span>假前項悖論 (False Antecedent)</div>
+                            <p style="font-family: var(--font-mono); font-size: 0.95rem; color: var(--accent-orange-deep); margin-bottom: 0.5rem;">¬ P ⊢ P → Q</p>
+                            <p><strong>拉丁格言：</strong><em>Ex falso quodlibet</em>（偽妄之中，可推導出一切事物）。</p>
+                            <ul style="padding-left: 1.2rem; font-size: 0.88rem; margin-top: 0.6rem;">
+                                <li>「若月球是起司做的，則地球是圓的。」(真)</li>
+                                <li>「若月球是起司做的，則地球是平的。」(真)</li>
+                            </ul>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.6rem;">一個虛假事實，同時使得兩個相互矛盾的命題在形式上皆成立！</p>
+                        </div>
+                        <div class="deck-card">
+                            <div class="card-heading"><span class="card-num">悖論二</span>真後項悖論 (True Consequent)</div>
+                            <p style="font-family: var(--font-mono); font-size: 0.95rem; color: var(--accent-orange-deep); margin-bottom: 0.5rem;">Q ⊢ P → Q</p>
+                            <p><strong>形式意涵：</strong>一個真理，受到任何無稽之談的實質蘊涵。</p>
+                            <ul style="padding-left: 1.2rem; font-size: 0.88rem; margin-top: 0.6rem;">
+                                <li>「若明天太陽下山，則 2 + 2 = 4。」(真)</li>
+                                <li>「若火星人正在統治地球，則 2 + 2 = 4。」(真)</li>
+                            </ul>
+                            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.6rem;">前件完全喪失了作為後件「前提」或「理由」的功能。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 5: 演繹定理與條件證法 -->
+            <div class="slide-card" data-slide="5">
+                <div class="slide-title-wrap">
+                    <img src="../assets/choju68_0023_1.png" alt="荷葉傘學者貓" class="slide-sticker" style="top: -12px; right: 0; height: 112px;">
+                    <div class="slide-kicker">04 // DEDUCTION THEOREM & CP</div>
+                    <h2 class="slide-title">演繹定理的雙刃劍</h2>
+                </div>
+                <div class="slide-content-body">
+                    <div class="callout-box">
+                        <strong>演繹定理 (Deduction Theorem)：</strong>
+                        <span class="math-symbol">Γ, A ⊢ B ⟺ Γ ⊢ A → B</span>
+                    </div>
+                    <p>在自然演繹法的「條件證明法 (Conditional Proof, CP)」中，我們透過<strong>假定前件 A</strong>，若能有效推導出 <strong>B</strong>，即可封閉假設並輸出 <strong>A → B</strong>。</p>
+                    <div class="grid-two-col">
+                        <div class="deck-card">
+                            <div class="card-heading">光明面：理性論證的普遍化</div>
+                            <p style="font-size: 0.88rem;">演繹定理保證了人類理性推論能從「特定情境的暫時假定」昇華為「普適客觀的條件規律」，是科學模型建構的核心思維。</p>
+                        </div>
+                        <div class="deck-card">
+                            <div class="card-heading">陰暗面：無相干性的形式合法化</div>
+                            <p style="font-size: 0.88rem;">若結論 B 本身即為真理，根據系統完備性，任何無關假設 A 都能合法進入推導，形式化地催生了「無因果關聯的實質條件句」。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 6: 自然語言的反抗 -->
+            <div class="slide-card" data-slide="6">
+                <div class="slide-title-wrap">
+                    <img src="../assets/choju95_0039_3.png" alt="抱頭冒汗貓" class="slide-sticker" style="top: -10px; right: 0; height: 105px;">
+                    <div class="slide-kicker">05 // NATURAL LANGUAGE RESISTANCE</div>
+                    <h2 class="slide-title">自然語言的抗拒機制：充要混淆與反事實崩塌</h2>
+                </div>
+                <div class="slide-content-body">
+                    <div class="grid-two-col">
+                        <div class="deck-card">
+                            <div class="card-heading"><span class="card-num">1</span>充要條件混淆與認知偏誤</div>
+                            <p style="font-size: 0.88rem;">日常語言中，人類極易將單向充分條件（If A then B）誤讀為雙向充要條件（Iff）。</p>
+                            <p style="font-size: 0.88rem; margin-top: 0.4rem;">在<strong>沃森選擇任務 (Wason Selection Task)</strong> 中，常人習慣性將條件句當作因果對稱體，導致大量犯下「肯定後項謬誤」與「否定前項謬誤」。</p>
+                        </div>
+                        <div class="deck-card">
+                            <div class="card-heading"><span class="card-num">2</span>反事實條件句的翻譯災難</div>
+                            <p style="font-size: 0.88rem;">日常修辭：「<strong>如果太陽從西邊升起，我就請你吃飯！</strong>」</p>
+                            <p style="font-size: 0.88rem; margin-top: 0.4rem;">說話者的真實語用意圖是強烈斷言「<strong>我絕不會請客</strong>」（後件假）。</p>
+                            <p style="font-size: 0.88rem; color: var(--accent-orange-deep); margin-top: 0.4rem;">但在實質條件句中，前件為假導致該句<strong>恆為真</strong>！形式系統直接將一句強烈否定認證為「客觀真理」。</p>
+                        </div>
+                    </div>
+                    <div class="callout-box">
+                        <strong>核心啟示：</strong>日常語言中的「反事實條件句」絕不可草率套用經典語句邏輯的實質條件句！
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: 哲學家的修補 -->
+            <div class="slide-card" data-slide="7">
+                <div class="slide-title-wrap">
+                    <img src="../assets/choju93_0012_3.png" alt="沉思學者貓" class="slide-sticker" style="top: -10px; right: 0; height: 105px;">
+                    <div class="slide-kicker">06 // PHILOSOPHICAL REMEDIES</div>
+                    <h2 class="slide-title">哲學家的修補路線：格萊斯與劉易斯</h2>
+                </div>
+                <div class="slide-content-body">
+                    <div class="grid-two-col">
+                        <div class="deck-card">
+                            <div class="card-heading"><span class="card-num">進路一</span>格萊斯（H. P. Grice）語用學救援</div>
+                            <p><strong>核心主張：</strong>實質條件句的語意完全正確；人們感到違和，是違反了對話的<strong>「合作原則」</strong>。</p>
+                            <p style="font-size: 0.88rem; margin-top: 0.5rem;"><strong>量之準則 (Maxim of Quantity)：</strong>應提供最充分的資訊。若明知後件為真（如 2+2=4），就該直言；拐彎說「若下雨則 2+2=4」，在語用上誤導了他人。</p>
+                            <p style="font-size: 0.88rem; color: var(--accent-purple-deep); font-weight: 500; margin-top: 0.5rem;">格萊斯裁決：悖論語句不是假話，而是「極不適當的真話」。</p>
+                        </div>
+                        <div class="deck-card">
+                            <div class="card-heading"><span class="card-num">進路二</span>C. I. 劉易斯模態嚴格條件句</div>
+                            <p><strong>核心主張：</strong>真正的蘊涵必須具備<strong>必然性 (Necessity)</strong>，排除偶然性湊合：</p>
+                            <p style="font-family: var(--font-mono); font-size: 0.92rem; color: var(--accent-orange-deep); margin: 0.4rem 0;">P ⟹ Q ≡ □(P → Q) ≡ ¬◇(P ∧ ¬ Q)</p>
+                            <p style="font-size: 0.88rem;">在所有可能世界中，都不存在「P 為真而 Q 為假」的世界。這開闢了現代模態邏輯與可能世界語意學的嶄新航道。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: 結論與哲學省思 -->
+            <div class="slide-card" data-slide="8">
+                <div class="slide-title-wrap">
+                    <img src="../assets/choju111_0006_2.png" alt="騰空飛越蛙" class="slide-sticker" style="top: -12px; right: 0; height: 95px;">
+                    <div class="slide-kicker">07 // SYNTHESIS & INSIGHTS</div>
+                    <h2 class="slide-title">形式工具的邊界與哲學啟示</h2>
+                </div>
+                <div class="slide-content-body">
+                    <div class="grid-two-col">
+                        <div class="deck-card">
+                            <div class="card-heading">形式符號系統的使命</div>
+                            <p style="font-size: 0.88rem;">追求外延性 (Extensionality)、演繹保真性與機械判定性；實質條件句是維持命題演算最簡潔、最強大的代數解。</p>
+                        </div>
+                        <div class="deck-card">
+                            <div class="card-heading">自然語言溝通的使命</div>
+                            <p style="font-size: 0.88rem;">追求意圖傳遞、因果相干性、認知經濟性與語境適應；條件句承載著人類對世界規律的因果假定。</p>
+                        </div>
+                    </div>
+                    <div class="callout-box" style="font-size: 1.05rem; line-height: 1.8;">
+                        <strong>終極哲學反思：</strong><br>
+                        實質蘊涵悖論不是符號系統的缺陷，而是人類為了獲得「確定性演算」所自覺付出的代價。<br>
+                        <span class="highlight-text">符號邏輯是理性論證的堅固骨架，但絕非鮮活自然語言的全部。</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 9: 參考文獻與未來展望 -->
+            <div class="slide-card" data-slide="9">
+                <div class="slide-title-wrap">
+                    <img src="../assets/chojuother2nd0014_10.png" alt="持扇回眸學者貓" class="slide-sticker" style="top: -12px; right: 0; height: 112px;">
+                    <div class="slide-kicker">08 // REFERENCES & EXPANSION</div>
+                    <h2 class="slide-title">參考文獻與未來 Wiki 擴充方向</h2>
+                </div>
+                <div class="slide-content-body">
+                    <p style="font-size: 0.86rem; color: var(--text-muted);">本研究嚴格立足於現有 Wiki 庫存，以下列出史丹佛哲學百科（SEP）權威文獻，供後續擴充庫存概念詞條：</p>
+                    <div class="grid-two-col">
+                        <div class="deck-card">
+                            <div class="card-heading">經典奠基文獻</div>
+                            <ul style="font-size: 0.82rem; line-height: 1.6; padding-left: 1.1rem;">
+                                <li><strong>H. P. Grice (1989)</strong>, <em>Studies in the Way of Words</em>（對話涵意）</li>
+                                <li><strong>C. I. Lewis (1912)</strong>, <em>Conditioned Disjunction</em>（嚴格條件句）</li>
+                                <li><strong>F. P. Ramsey (1929)</strong>, <em>General Propositions and Causality</em>（拉姆齊檢驗）</li>
+                            </ul>
+                        </div>
+                        <div class="deck-card">
+                            <div class="card-heading">現代機率與可能世界前沿</div>
+                            <ul style="font-size: 0.82rem; line-height: 1.6; padding-left: 1.1rem;">
+                                <li><strong>Ernest Adams (1975)</strong>, <em>The Logic of Conditionals</em>（亞當斯命題）</li>
+                                <li><strong>Dorothy Edgington (1995)</strong>, <em>On Conditionals</em>（無真值機率論）</li>
+                                <li><strong>Robert Stalnaker & David Lewis</strong>（反事實可能世界選擇函數）</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.84rem; color: var(--accent-orange-deep); font-family: var(--font-mono);">
+                        建議新增詞條：[[直陳條件句與拉姆齊檢驗]]、[[亞當斯命題與條件機率]]、[[可能世界語意學]]
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- 底部導航操作列 -->
+    <footer class="deck-footer">
+        <div class="footer-shortcuts-hint">
+            <span>操作捷徑：</span>
+            <span class="kbd-key">←</span>
+            <span class="kbd-key">→</span>
+            <span>切換投影片</span>
+            <span class="kbd-key">Space</span>
+            <span>下一頁</span>
+            <span class="kbd-key">F</span>
+            <span>全螢幕</span>
+        </div>
+
+        <div class="footer-nav-btns">
+            <button class="deck-btn" id="prevBtn" onclick="navigateSlide(-1)">上一頁 (←)</button>
+            <button class="deck-btn" id="nextBtn" onclick="navigateSlide(1)">下一頁 (→)</button>
+        </div>
+    </footer>
+
+    <script>
+        const TOTAL_SLIDES = 9;
+        let currentSlide = 1;
+
+        function updateSlide(targetIndex) {
+            if (targetIndex < 1) targetIndex = 1;
+            if (targetIndex > TOTAL_SLIDES) targetIndex = TOTAL_SLIDES;
+
+            currentSlide = targetIndex;
+
+            // 更新投影片 Active 狀態
+            document.querySelectorAll(".slide-card").forEach(card => {
+                const idx = parseInt(card.getAttribute("data-slide"), 10);
+                if (idx === currentSlide) {
+                    card.classList.add("active");
+                } else {
+                    card.classList.remove("active");
+                }
+            });
+
+            // 更新指示器與進度條
+            const counterEl = document.getElementById("slideCounter");
+            if (counterEl) {
+                const padCur = String(currentSlide).padStart(2, "0");
+                const padTot = String(TOTAL_SLIDES).padStart(2, "0");
+                counterEl.innerText = `${padCur} / ${padTot}`;
+            }
+
+            const progressEl = document.getElementById("progressBar");
+            if (progressEl) {
+                const percent = (currentSlide / TOTAL_SLIDES) * 100;
+                progressEl.style.width = percent + "%";
+            }
+
+            // 更新按鈕啟用狀態
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+            if (prevBtn) prevBtn.style.opacity = currentSlide === 1 ? "0.45" : "1";
+            if (nextBtn) nextBtn.style.opacity = currentSlide === TOTAL_SLIDES ? "0.45" : "1";
+        }
+
+        function navigateSlide(delta) {
+            updateSlide(currentSlide + delta);
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log("全螢幕請求被阻止", err);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // 鍵盤導航監聽
+        window.addEventListener("keydown", (e) => {
+            if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") {
+                e.preventDefault();
+                navigateSlide(1);
+            } else if (e.key === "ArrowLeft" || e.key === "PageUp" || e.key === "Backspace") {
+                e.preventDefault();
+                navigateSlide(-1);
+            } else if (e.key === "Home") {
+                e.preventDefault();
+                updateSlide(1);
+            } else if (e.key === "End") {
+                e.preventDefault();
+                updateSlide(TOTAL_SLIDES);
+            } else if (e.key === "f" || e.key === "F") {
+                e.preventDefault();
+                toggleFullscreen();
+            }
+        });
+
+        // 初始化
+        window.addEventListener("DOMContentLoaded", () => {
+            updateSlide(1);
+        });
+    </script>
+</body>
+</html>
